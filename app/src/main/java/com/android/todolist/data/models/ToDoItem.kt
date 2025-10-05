@@ -1,6 +1,6 @@
 package com.android.todolist.data.models
-
-
+import kotlinx.serialization.Serializable
+@Serializable
 data class ToDoItem (
     val id: String,
     val title: String,

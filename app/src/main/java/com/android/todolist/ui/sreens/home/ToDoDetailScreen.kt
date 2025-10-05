@@ -22,19 +22,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.android.todolist.data.models.ToDoData
-import com.android.todolist.data.models.ToDoData.findById
-import com.android.todolist.data.models.ToDoItem
+import com.android.todolist.viewModel.home.ToDoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToDoDetailScreen(
     navController: NavController,
-    toDoItem: ToDoItem,
+    toDoItemId: String,
+    viewModel: ToDoViewModel,
     modifier: Modifier = Modifier
 ) {
-    val todo = ToDoData.findById(toDoItem.id.toInt())
+    val todo = viewModel.findById(toDoItemId)
 
     Scaffold(
         topBar = {

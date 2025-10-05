@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 object ToDoList
 
 @Serializable
-class ToDoDetailArgs(val toDoItemId: Int)
+class ToDoDetail(val toDoItemId: Int)

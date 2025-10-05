@@ -14,18 +14,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.android.todolist.data.models.ToDoData
 import com.android.todolist.viewModel.home.ToDoViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToDoListScreen (viewModel: ToDoViewModel = viewModel(),
-                    navController: NavController) {
+fun ToDoListScreen (viewModel: ToDoViewModel ,
+                    navController: NavController)
+    {
+        val context = LocalContext.current
 
+        // Carga los datos cuando se crea el Composable
+        LaunchedEffect(Unit) {
+            viewModel.loadToDos(context)
+        }
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -50,8 +57,8 @@ fun ToDoListScreen (viewModel: ToDoViewModel = viewModel(),
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(padding)
             ) {
-                items(ToDoData.toDoList.size) { todo ->
-                    ToDoItem(toDoItem = ToDoData.toDoList[todo],
+                items(viewModel.toDoList.size) { todo ->
+                    ToDoItem(toDoItem = viewModel.toDoList[todo],
                         navController = navController,
                         toggleDone = { id -> viewModel.toggleDone(id.toString()) },
                         removeToDo = { id -> viewModel.removeToDo(id.toString()) })

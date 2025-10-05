@@ -24,7 +24,7 @@ object ToDoData {
             isDone = false
         )
     )
-    fun ToDoData.findById(id: Int): ToDoItem? {
+    fun ToDoData.findById(id: String): ToDoItem? {
         return toDoList.find { it.id == id.toString() } }
 
     }
