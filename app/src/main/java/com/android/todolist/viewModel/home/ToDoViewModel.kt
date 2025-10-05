@@ -13,6 +13,12 @@ class ToDoViewModel : ViewModel()  {
     private val _toDoList = mutableStateListOf<ToDoItem>()
     val toDoList: List<ToDoItem> = _toDoList
 
+    val pendingToDos: List<ToDoItem>
+        get() = _toDoList.filter { !it.isDone }
+
+    val doneToDos: List<ToDoItem>
+        get() = _toDoList.filter { it.isDone }
+
     fun saveToDos(context: Context) {
         val prefs = context.getSharedPreferences("todo_prefs", Context.MODE_PRIVATE)
         val json = Json.encodeToString(_toDoList.toList())

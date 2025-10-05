@@ -65,9 +65,9 @@ fun ToDoItem(
                     else
                         MaterialTheme.colorScheme.onSurface
                 )
-                toDoItem.description?.let {
+      /*         toDoItem.description?.let {
                     Text(text = it, style = MaterialTheme.typography.bodyMedium)
-                }
+                }*/
             }
 
 

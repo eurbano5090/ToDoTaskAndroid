@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.android.todolist.ui.sreens.add.AddToDoScreen
+import com.android.todolist.ui.sreens.done.DoneToDoScreen
 import com.android.todolist.ui.sreens.home.ToDoDetailScreen
 import com.android.todolist.ui.sreens.home.ToDoListScreen
 import com.android.todolist.viewModel.home.ToDoViewModel
@@ -24,6 +25,12 @@ fun AppNavigation() {
             ToDoListScreen(
                 viewModel = viewModel,
                 navController = navController)
+        }
+        composable("doneToDos") {  // <- NUEVA RUTA
+            DoneToDoScreen(
+                viewModel = viewModel,
+                navController = navController
+            )
         }
         composable(
             route = "toDoDetail/{toDoItemId}",

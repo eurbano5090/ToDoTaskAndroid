@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.android.todolist.viewModel.home.ToDoViewModel
 
@@ -42,6 +42,15 @@ fun ToDoListScreen (viewModel: ToDoViewModel ,
                     title = { Text("Lista de Pendientes") },
                     actions = {
                         IconButton(onClick = {
+                            navController.navigate("doneToDos")
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = "Ver completadas",
+                                tint = MaterialTheme.colorScheme.onTertiary
+                            )
+                        }
+                        IconButton(onClick = {
                             navController.navigate("addToDo")
                         }) {
                             Icon(
@@ -57,11 +66,17 @@ fun ToDoListScreen (viewModel: ToDoViewModel ,
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(padding)
             ) {
-                items(viewModel.toDoList.size) { todo ->
-                    ToDoItem(toDoItem = viewModel.toDoList[todo],
+                items(viewModel.pendingToDos.size) { todo ->
+                    ToDoItem(toDoItem = viewModel.pendingToDos[todo],
                         navController = navController,
-                        toggleDone = { id -> viewModel.toggleDone(id.toString()) },
-                        removeToDo = { id -> viewModel.removeToDo(id.toString()) })
+                        toggleDone = { id ->
+                            viewModel.toggleDone(id)
+                            viewModel.saveToDos(context)
+                        },
+                        removeToDo = { id ->
+                            viewModel.removeToDo(id)
+                            viewModel.saveToDos(context)
+                        })
                 }
             }
 
