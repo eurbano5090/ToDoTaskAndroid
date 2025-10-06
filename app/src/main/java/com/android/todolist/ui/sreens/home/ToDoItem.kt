@@ -1,5 +1,6 @@
 package com.android.todolist.ui.sreens.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
@@ -19,10 +21,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.android.todolist.data.models.ToDoItem
+import com.android.todolist.ui.theme.MyGradient
+import com.android.todolist.ui.theme.Purple40
 
 @Composable
 fun ToDoItem(
@@ -37,15 +42,19 @@ fun ToDoItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable { navController.navigate("toDoDetail/${toDoItem.id}") },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(MyGradient)
+                .clip(CircleShape)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Checkbox(
                 checked = toDoItem.isDone,
                 onCheckedChange = { toggleDone(toDoItem.id) }
@@ -63,11 +72,8 @@ fun ToDoItem(
                     color = if (toDoItem.isDone)
                         MaterialTheme.colorScheme.outline
                     else
-                        MaterialTheme.colorScheme.onSurface
+                        Purple40
                 )
-      /*         toDoItem.description?.let {
-                    Text(text = it, style = MaterialTheme.typography.bodyMedium)
-                }*/
             }
 
 
@@ -75,7 +81,7 @@ fun ToDoItem(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "Eliminar tarea",
-                    tint = MaterialTheme.colorScheme.error
+                    tint = Purple40
                 )
             }
         }

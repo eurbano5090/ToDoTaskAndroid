@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.android.todolist.ui.sreens.home.ToDoItem
+import com.android.todolist.ui.theme.Purple40
 import com.android.todolist.viewModel.home.ToDoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +26,7 @@ fun DoneToDoScreen(
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary
+                    containerColor = Purple40
                 ),
                 title = { Text("Tareas Completadas") },
                 navigationIcon = {

@@ -1,5 +1,4 @@
 package com.android.todolist.ui.sreens.add
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,48 +26,46 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.android.todolist.data.models.ToDoItem
 import com.android.todolist.ui.theme.Purple40
 import com.android.todolist.viewModel.home.ToDoViewModel
-import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddToDoScreen(
-    toDo: ToDoItem?,
-    viewModel: ToDoViewModel = viewModel(),
+fun EditToDoScreen (
     navController: NavController,
-    modifier: Modifier = Modifier) {
+    toDoItemId: String,
+    viewModel: ToDoViewModel,
+    modifier: Modifier = Modifier){
 
     val context = LocalContext.current
-    var title by remember { mutableStateOf("") }
-        var description by remember { mutableStateOf("") }
-        val date = remember { java.time.LocalDate.now().toString() }
+    val todo = viewModel.findById(toDoItemId)
+    var title by remember { mutableStateOf(todo?.title ?: "") }
+    var description by remember { mutableStateOf(todo?.description ?: "") }
 
     Scaffold(
-    topBar = {
-        TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Purple40
-            ),
-            title = { Text("Agregar tarea") },
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Volver"
-                    )
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Purple40
+                ),
+                title = { Text("Editar tarea") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver"
+                        )
+                    }
                 }
-            }
-        )}
-            ) { padding ->
-       Column(
-           modifier = Modifier
-               .fillMaxSize()
-               .padding(padding)
-               .padding(16.dp),
+            )}
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextField(
@@ -87,21 +84,19 @@ fun AddToDoScreen(
 
             Button(onClick = {
 
-                val newId = UUID.randomUUID().toString()
-                val newToDo = ToDoItem(
-                    id = newId,
+                val editToDo = ToDoItem(
+                    id = toDoItemId,
                     title = title,
                     description = description,
-                    date = date,
-                    isDone = false
+                    date = todo?.date ?: java.time.LocalDate.now().toString(),
+                    isDone = todo?.isDone?:false
                 )
 
-                viewModel.addToDo(newToDo)
+                viewModel.updateToDo(editToDo)
                 viewModel.saveToDos(context)
                 navController.popBackStack()
             }) {
-                Text("Agregar tarea")
+                Text("Guardar cambios")
             }
         }
     }}
-

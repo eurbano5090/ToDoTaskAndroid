@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.android.todolist.ui.sreens.add.AddToDoScreen
+import com.android.todolist.ui.sreens.add.EditToDoScreen
 import com.android.todolist.ui.sreens.done.DoneToDoScreen
 import com.android.todolist.ui.sreens.home.ToDoDetailScreen
 import com.android.todolist.ui.sreens.home.ToDoListScreen
@@ -44,12 +45,22 @@ fun AppNavigation() {
             )
         }
 
-
         composable("addToDo") {
             AddToDoScreen(
                 navController = navController,
                 toDo = null,
                 viewModel = viewModel)
+        }
+        composable(
+            route = "editToDo/{toDoItemId}",
+            arguments = listOf(navArgument("toDoItemId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val toDoItemId = backStackEntry.arguments?.getString("toDoItemId") ?: ""
+            EditToDoScreen(
+                navController = navController,
+                toDoItemId = toDoItemId,
+                viewModel = viewModel
+            )
         }
     }
 }

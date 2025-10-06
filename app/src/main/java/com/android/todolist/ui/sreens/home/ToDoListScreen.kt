@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.android.todolist.ui.theme.Purple40
 import com.android.todolist.viewModel.home.ToDoViewModel
 
 
@@ -37,7 +39,7 @@ fun ToDoListScreen (viewModel: ToDoViewModel ,
             topBar = {
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary
+                        containerColor = Purple40
                     ),
                     title = { Text("Lista de Pendientes") },
                     actions = {
@@ -54,7 +56,7 @@ fun ToDoListScreen (viewModel: ToDoViewModel ,
                             navController.navigate("addToDo")
                         }) {
                             Icon(
-                                imageVector = Icons.Default.Add,
+                                imageVector = Icons.Default.AddCircle,
                                 contentDescription = "Agregar tarea",
                                 tint = MaterialTheme.colorScheme.onTertiary
                             )

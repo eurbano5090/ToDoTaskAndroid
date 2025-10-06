@@ -1,5 +1,6 @@
 package com.android.todolist.ui.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -18,3 +19,10 @@ val Lavender100 = Color(0xFFF4F0FF)
 val Amber = Color(0xFFFBC512)
 
 val Transition = Color(0xFF00c4cc)
+
+val MyGradient = Brush.verticalGradient(
+    colors = listOf(
+        Color(0xFF8994F0),
+        Color(0xFFE5DBF7)
+    )
+)
