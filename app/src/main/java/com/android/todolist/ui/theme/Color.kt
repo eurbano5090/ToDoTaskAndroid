@@ -22,7 +22,7 @@ val Transition = Color(0xFF00c4cc)
 
 val MyGradient = Brush.verticalGradient(
     colors = listOf(
-        Color(0xFF8994F0),
-        Color(0xFFE5DBF7)
+        Color(0xFFeaeaff),
+        Color(0xFFb0b0fe)
     )
 )
