@@ -1,5 +1,7 @@
 package com.android.todolist.ui.sreens.home
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +16,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +49,7 @@ fun ToDoDetailScreen(
     modifier: Modifier = Modifier
 ) {
     val todo = viewModel.findById(toDoItemId)
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -61,8 +66,21 @@ fun ToDoDetailScreen(
                         imageVector = Icons.Default.Edit,
                         contentDescription = "Editar tarea",
                         tint = MaterialTheme.colorScheme.onTertiary
-                    )
-                }},
+                    )}
+                    if (todo != null) {
+                        IconButton(onClick = {
+                            shareTask(context, todo.title, todo.description ?: "")
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = "Compartir tarea",
+                                tint = MaterialTheme.colorScheme.onTertiary
+                            )
+                        }
+                    }
+
+                },
+
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -85,59 +103,61 @@ fun ToDoDetailScreen(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                 )
-            ) { Column(
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(24.dp)
-                    ) {
-                Card(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .padding(12.dp)
-                        .clip(CircleShape),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    )
                 ) {
-                    Box(
+                    Card(
                         modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                            .size(80.dp)
+                            .padding(12.dp)
+                            .clip(CircleShape),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        )
                     ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = todo.title.first().uppercase(),
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = todo.title,
+                        style = MaterialTheme.typography.headlineMedium,  // <- Más grande
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                    todo.description?.let {
                         Text(
-                            text = todo.title.first().uppercase(),
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold
+                            text = it,
+                            style = MaterialTheme.typography.bodyLarge,
+                            lineHeight = 24.sp
                         )
                     }
-                }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = todo.title,
-                    style = MaterialTheme.typography.headlineMedium,  // <- Más grande
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-                todo.description?.let {
                     Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodyLarge,
-                        lineHeight = 24.sp
+                        text = "Fecha: ${todo.date}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "Fecha: ${todo.date}",
-                    style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
-        } }else {
+        } else {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -145,5 +165,17 @@ fun ToDoDetailScreen(
                 Text("Tarea no encontrada")
             }
         }
+    }}
+
+    fun shareTask(context: Context, title: String, description: String) {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "📋 *Tarea:* $title\n📝 Descripción: $description"
+            )
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, "Compartir tarea con...")
+        context.startActivity(shareIntent)
     }
-}
