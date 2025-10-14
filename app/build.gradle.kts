@@ -56,6 +56,10 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.androidx.foundation.layout)
     implementation(libs.androidx.ui.text)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material3)
+    //   implementation(libs.ui.graphics)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -63,4 +67,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //->biometric
+    implementation(libs.androidx.biometric)
 }

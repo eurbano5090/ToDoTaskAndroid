@@ -11,12 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,10 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.android.todolist.R
 import com.android.todolist.ui.theme.MyGradient
 import com.android.todolist.ui.theme.Purple40
 import com.android.todolist.viewModel.home.ToDoViewModel
@@ -63,18 +59,18 @@ fun ToDoDetailScreen(
                     navController.navigate("editToDo/$toDoItemId")
                 }) {
                     Icon(
-                        imageVector = Icons.Default.Edit,
+                        painter = painterResource(R.drawable.edit),
                         contentDescription = "Editar tarea",
-                        tint = MaterialTheme.colorScheme.onTertiary
+
                     )}
                     if (todo != null) {
                         IconButton(onClick = {
                             shareTask(context, todo.title, todo.description ?: "")
                         }) {
                             Icon(
-                                imageVector = Icons.Default.Share,
+                                painter = painterResource(R.drawable.ic_share),
                                 contentDescription = "Compartir tarea",
-                                tint = MaterialTheme.colorScheme.onTertiary
+
                             )
                         }
                     }
@@ -84,7 +80,7 @@ fun ToDoDetailScreen(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            painter = painterResource(R.drawable.back),
                             contentDescription = "Volver"
                         )
                     }

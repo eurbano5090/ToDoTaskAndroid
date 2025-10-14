@@ -1,6 +1,6 @@
 package com.android.todolist.data.models
 
-object ToDoData {
+object ToDoData {//-> esto fue antes de lograr guardar con context
     val toDoList = mutableListOf(
         ToDoItem(
             id = "1",

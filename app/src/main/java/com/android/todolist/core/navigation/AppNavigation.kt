@@ -7,27 +7,36 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.android.todolist.ui.sreens.login.LoginScreen
 import com.android.todolist.ui.sreens.add.AddToDoScreen
 import com.android.todolist.ui.sreens.add.EditToDoScreen
 import com.android.todolist.ui.sreens.done.DoneToDoScreen
 import com.android.todolist.ui.sreens.home.ToDoDetailScreen
 import com.android.todolist.ui.sreens.home.ToDoListScreen
+import com.android.todolist.viewModel.auth.LoginViewModel
 import com.android.todolist.viewModel.home.ToDoViewModel
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val viewModel: ToDoViewModel = viewModel()
-    NavHost(
-        navController = navController,
-        startDestination = "toDoList"
-    ) {
+    val loginViewModel: LoginViewModel = viewModel()
+
+    NavHost(navController = navController, startDestination = "login"){
+
+        composable("login") {
+            LoginScreen(
+                loginViewModel = loginViewModel,
+                navController = navController
+            )
+        }
+
         composable("toDoList") {
             ToDoListScreen(
                 viewModel = viewModel,
                 navController = navController)
         }
-        composable("doneToDos") {  // <- NUEVA RUTA
+        composable("doneToDos") {  // -> NUEVA RUTA
             DoneToDoScreen(
                 viewModel = viewModel,
                 navController = navController

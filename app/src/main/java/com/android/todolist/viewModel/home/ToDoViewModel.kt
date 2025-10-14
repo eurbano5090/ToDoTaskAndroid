@@ -8,6 +8,7 @@ import com.android.todolist.data.models.ToDoItem
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+
 class ToDoViewModel : ViewModel()  {
 
     private val _toDoList = mutableStateListOf<ToDoItem>()
@@ -53,4 +54,4 @@ class ToDoViewModel : ViewModel()  {
     }
 
 
-    }
+}

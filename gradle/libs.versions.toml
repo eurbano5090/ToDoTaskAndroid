@@ -15,6 +15,9 @@ ui = "1.9.2"
 foundationLayout = "1.9.2"
 uiText = "1.9.2"
 kotlinx_serialization = "1.7.3"
+biometric = "1.2.0-alpha05"
+appcompat = "1.7.1"
+material3 = "1.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +41,10 @@ ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 androidx-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx_serialization" }
+androidx-biometric = { module = "androidx.biometric:biometric", version = "1.2.0-alpha05" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

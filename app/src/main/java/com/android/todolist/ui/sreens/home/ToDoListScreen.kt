@@ -3,10 +3,6 @@ package com.android.todolist.ui.sreens.home
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import com.android.todolist.R
 import com.android.todolist.ui.theme.Purple40
 import com.android.todolist.viewModel.home.ToDoViewModel
 
@@ -31,7 +29,8 @@ fun ToDoListScreen (viewModel: ToDoViewModel ,
     {
         val context = LocalContext.current
 
-        // Carga los datos cuando se crea el Composable
+
+        //-> Carga los datos cuando se crea el Composable
         LaunchedEffect(Unit) {
             viewModel.loadToDos(context)
         }
@@ -47,18 +46,16 @@ fun ToDoListScreen (viewModel: ToDoViewModel ,
                             navController.navigate("doneToDos")
                         }) {
                             Icon(
-                                imageVector = Icons.Default.CheckCircle,
+                                painter = painterResource(R.drawable.ic_check),//-> se usa painter para no usar la libreria 
                                 contentDescription = "Ver completadas",
-                                tint = MaterialTheme.colorScheme.onTertiary
                             )
                         }
                         IconButton(onClick = {
                             navController.navigate("addToDo")
                         }) {
                             Icon(
-                                imageVector = Icons.Default.AddCircle,
+                                painter = painterResource(R.drawable.ic_add),
                                 contentDescription = "Agregar tarea",
-                                tint = MaterialTheme.colorScheme.onTertiary
                             )
                         }
                     }
