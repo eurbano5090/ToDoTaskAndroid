@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    kotlin("kapt")
 }
 
 android {
@@ -17,7 +18,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+                arguments["room.incremental"] = "true"
+            }
+        }
     }
+
 
     buildTypes {
         release {
@@ -29,11 +38,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "21"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -41,6 +50,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -57,9 +67,12 @@ dependencies {
     implementation(libs.androidx.foundation.layout)
     implementation(libs.androidx.ui.text)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.appcompat)
     implementation(libs.material3)
-    //   implementation(libs.ui.graphics)
+    implementation(libs.androidx.compose.ui.ui)
+    implementation(libs.foundation.layout)
+    implementation(libs.androidx.runtime)
+    implementation(libs.identity.jvm)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,4 +83,13 @@ dependencies {
 
     //->biometric
     implementation(libs.androidx.biometric)
+
+
+    //->room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+
+
+
 }

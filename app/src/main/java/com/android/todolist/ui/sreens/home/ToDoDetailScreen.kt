@@ -22,6 +22,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.android.todolist.R
+import com.android.todolist.data.models.ToDoItem
 import com.android.todolist.ui.theme.MyGradient
 import com.android.todolist.ui.theme.Purple40
 import com.android.todolist.viewModel.home.ToDoViewModel
@@ -44,8 +50,21 @@ fun ToDoDetailScreen(
     viewModel: ToDoViewModel,
     modifier: Modifier = Modifier
 ) {
-    val todo = viewModel.findById(toDoItemId)
+    var todo by remember { mutableStateOf<ToDoItem?>(null) }
+    var title by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var categoriaId by remember { mutableStateOf("") }
     val context = LocalContext.current
+
+    LaunchedEffect(toDoItemId) {
+        val resultado = viewModel.obtenerPorId(toDoItemId)
+        todo = resultado
+        resultado?.let {
+            title = it.title
+            description = it.description ?: ""
+            categoriaId = it.categoriaId
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -63,15 +82,15 @@ fun ToDoDetailScreen(
                         contentDescription = "Editar tarea",
 
                     )}
-                    if (todo != null) {
+                    todo?.let {
                         IconButton(onClick = {
-                            shareTask(context, todo.title, todo.description ?: "")
+                            shareTask(context, todo?.title?: "", todo?.description ?: "")
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_share),
                                 contentDescription = "Compartir tarea",
 
-                            )
+                                )
                         }
                     }
 
@@ -120,7 +139,7 @@ fun ToDoDetailScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = todo.title.first().uppercase(),
+                                text = todo!!.title.first().uppercase(),
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold
                             )
@@ -130,13 +149,13 @@ fun ToDoDetailScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = todo.title,
+                        text = todo?.title?: "",
                         style = MaterialTheme.typography.headlineMedium,  // <- Más grande
                         fontWeight = FontWeight.Bold
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
-                    todo.description?.let {
+                    todo?.description?.let {
                         Text(
                             text = it,
                             style = MaterialTheme.typography.bodyLarge,
@@ -147,9 +166,14 @@ fun ToDoDetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "Fecha: ${todo.date}",
+                        text = "Fecha: ${todo?.date}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "🕒 ${todo?.time}",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.outline
                     )
                 }
             }

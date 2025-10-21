@@ -22,15 +22,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.android.todolist.R
+import com.android.todolist.data.models.CategoriasPredefinidas
 import com.android.todolist.data.models.ToDoItem
+import com.android.todolist.ui.components.Selectors
 import com.android.todolist.ui.theme.Purple40
 import com.android.todolist.viewModel.home.ToDoViewModel
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,66 +44,85 @@ fun AddToDoScreen(
     navController: NavController,
     modifier: Modifier = Modifier) {
 
-    val context = LocalContext.current
+    //   val context = LocalContext.current
+    val currentTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
     var title by remember { mutableStateOf("") }
-        var description by remember { mutableStateOf("") }
-        val date = remember { java.time.LocalDate.now().toString() }
+    var description by remember { mutableStateOf("") }
+    val date = remember { java.time.LocalDate.now().toString() }
+    var selectedCategoriaId by remember { mutableStateOf(CategoriasPredefinidas.lista.first().id) }
 
     Scaffold(
-    topBar = {
-        TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Purple40
-            ),
-            title = { Text("Agregar tarea") },
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        painter = painterResource(R.drawable.back),
-                        contentDescription = "Volver"
-                    )
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Purple40
+                ),
+                title = { Text("Agregar tarea") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            painter = painterResource(R.drawable.back),
+                            contentDescription = "Volver"
+                        )
+                    }
                 }
-            }
-        )}
-            ) { padding ->
-       Column(
-           modifier = Modifier
-               .fillMaxSize()
-               .padding(padding)
-               .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(horizontal = 16.dp)
         ) {
-            OutlinedTextField(
-                value = title,
-                onValueChange = { title = it },
-                label = { Text("Título de la tarea") },
-                modifier = Modifier.fillMaxWidth().padding(5.dp)
-            )
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Descripción de la tarea") },
-                modifier = Modifier.fillMaxWidth().padding(5.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = {
-
-                val newId = UUID.randomUUID().toString()
-                val newToDo = ToDoItem(
-                    id = newId,
-                    title = title,
-                    description = description,
-                    date = date,
-                    isDone = false
+            Selectors(
+                categorias = CategoriasPredefinidas.lista,
+                selectedCategoriaId = selectedCategoriaId,
+                onCategoriaSelected = { selectedCategoriaId = it }
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    label = { Text("Título de la tarea") },
+                    modifier = Modifier.fillMaxWidth().padding(5.dp)
+                )
+                OutlinedTextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("Descripción de la tarea") },
+                    modifier = Modifier.fillMaxWidth().padding(5.dp)
                 )
 
-                viewModel.addToDo(newToDo)
-                viewModel.saveToDos(context)
-                navController.popBackStack()
-            }) {
-                Text("Agregar tarea")
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = {
+
+                    val newId = UUID.randomUUID().toString()
+                    val newToDo = ToDoItem(
+                        id = newId,
+                        title = title,
+                        description = description,
+                        date = date,
+                        isDone = false,
+                        categoriaId = selectedCategoriaId,
+                        time = currentTime
+                    )
+
+
+                    viewModel.insertarToDo(newToDo)
+                    navController.popBackStack()
+                }) {
+                    Text("Agregar tarea")
+                }
             }
         }
-    }}
-
+    }
+}

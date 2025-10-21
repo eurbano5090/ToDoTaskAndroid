@@ -61,13 +61,13 @@ fun AppNavigation() {
                 viewModel = viewModel)
         }
         composable(
-            route = "editToDo/{toDoItemId}",
-            arguments = listOf(navArgument("toDoItemId") { type = NavType.StringType })
+            route = "editToDo/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) { backStackEntry ->
-            val toDoItemId = backStackEntry.arguments?.getString("toDoItemId") ?: ""
+            val toDoItemId = backStackEntry.arguments?.getString("id") ?: ""
             EditToDoScreen(
                 navController = navController,
-                toDoItemId = toDoItemId,
+                id = toDoItemId,
                 viewModel = viewModel
             )
         }

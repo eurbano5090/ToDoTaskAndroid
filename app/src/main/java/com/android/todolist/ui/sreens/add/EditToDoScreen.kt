@@ -15,13 +15,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -34,14 +34,25 @@ import com.android.todolist.viewModel.home.ToDoViewModel
 @Composable
 fun EditToDoScreen (
     navController: NavController,
-    toDoItemId: String,
+    id: String,
     viewModel: ToDoViewModel,
     modifier: Modifier = Modifier){
 
-    val context = LocalContext.current
-    val todo = viewModel.findById(toDoItemId)
-    var title by remember { mutableStateOf(todo?.title ?: "") }
-    var description by remember { mutableStateOf(todo?.description ?: "") }
+  //  val context = LocalContext.current
+    var todo by remember { mutableStateOf<ToDoItem?>(null) }
+    var title by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var categoriaId by remember { mutableStateOf("") }
+
+    LaunchedEffect(id) {
+        val resultado = viewModel.obtenerPorId(id)
+        todo = resultado
+        resultado?.let {
+            title = it.title
+            description = it.description ?: ""
+            categoriaId = it.categoriaId
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -84,15 +95,16 @@ fun EditToDoScreen (
             Button(onClick = {
 
                 val editToDo = ToDoItem(
-                    id = toDoItemId,
+                    id = id,
                     title = title,
                     description = description,
                     date = todo?.date ?: java.time.LocalDate.now().toString(),
-                    isDone = todo?.isDone?:false
+                    isDone = todo?.isDone?:false,
+                    time = todo?.time?: java.time.LocalTime.now().toString(),
+                    categoriaId = categoriaId
                 )
 
-                viewModel.updateToDo(editToDo)
-                viewModel.saveToDos(context)
+                viewModel.actualizarToDo(editToDo)
                 navController.popBackStack()
             }) {
                 Text("Guardar cambios")

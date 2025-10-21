@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.android.todolist.R
 import com.android.todolist.data.models.ToDoItem
@@ -30,7 +31,7 @@ import com.android.todolist.ui.theme.MyGradient
 import com.android.todolist.ui.theme.Purple40
 
 @Composable
-fun ToDoItem(
+fun ToDoItemCard(
     toDoItem: ToDoItem,
     toggleDone: (String) -> Unit,
     removeToDo: (String) -> Unit,
@@ -52,7 +53,7 @@ fun ToDoItem(
                 .fillMaxWidth()
                 .background(MyGradient)
                 .clip(CircleShape)
-                .padding(16.dp),
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
@@ -67,12 +68,17 @@ fun ToDoItem(
             ) {
                 Text(
                     text = toDoItem.title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = if (toDoItem.isDone) FontWeight.Normal else FontWeight.Bold,
                     color = if (toDoItem.isDone)
                         MaterialTheme.colorScheme.outline
                     else
                         Purple40
+                )
+                Text(
+                    text = "🕒 ${toDoItem.time}",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
 
