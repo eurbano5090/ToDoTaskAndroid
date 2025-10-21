@@ -4,13 +4,14 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.todolist.data.entity.AppDatabase
+import com.android.todolist.data.entity.Categoria
 import com.android.todolist.data.models.ToDoItem
+import com.android.todolist.data.repositories.CategoriaRepository
 import com.android.todolist.data.repositories.ToDoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 class ToDoViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ToDoRepository
+    private val catRepository : CategoriaRepository
 
     //-> StateFlow para observar cambios automáticamente
     private val _toDoList = MutableStateFlow<List<ToDoItem>>(emptyList())
@@ -45,6 +47,9 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val dao = AppDatabase.getDatabase(application).toDoDao()
         repository = ToDoRepository(dao)
+        val catDao = AppDatabase.getDatabase(application).categoryDao()
+        catRepository = CategoriaRepository(catDao)
+
         observarToDos()
     }
 
@@ -92,9 +97,13 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun obtenerPorId(id: String): ToDoItem? {
         return repository.obtenerPorId(id)
     }
+
+    suspend fun buscarCategoriaPorId(id: String): Categoria?{
+        return catRepository.findById(id)
+    }
 }
 
-// Estados de UI
+//-> Estados de UI
 sealed class UiState {
     object Loading : UiState()
     object Success : UiState()

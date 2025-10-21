@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,9 +41,9 @@ fun EditToDoScreen (
 
   //  val context = LocalContext.current
     var todo by remember { mutableStateOf<ToDoItem?>(null) }
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var categoriaId by remember { mutableStateOf("") }
+    var title by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var categoriaId by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(id) {
         val resultado = viewModel.obtenerPorId(id)
@@ -90,6 +91,8 @@ fun EditToDoScreen (
                 label = { Text("Descripción de la tarea") },
                 modifier = Modifier.fillMaxWidth().padding(5.dp)
             )
+
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = {

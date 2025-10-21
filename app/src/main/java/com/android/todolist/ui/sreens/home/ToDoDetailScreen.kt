@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.android.todolist.R
+import com.android.todolist.data.models.Categoria
 import com.android.todolist.data.models.ToDoItem
 import com.android.todolist.ui.theme.MyGradient
 import com.android.todolist.ui.theme.Purple40
@@ -51,19 +53,24 @@ fun ToDoDetailScreen(
     modifier: Modifier = Modifier
 ) {
     var todo by remember { mutableStateOf<ToDoItem?>(null) }
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var categoriaId by remember { mutableStateOf("") }
+    var cat by remember { mutableStateOf<Categoria?>(null) }
+    var title by rememberSaveable  { mutableStateOf("") }
+    var description by rememberSaveable  { mutableStateOf("") }
+    var categoriaId by rememberSaveable  { mutableStateOf("") }
     val context = LocalContext.current
 
-    LaunchedEffect(toDoItemId) {
+
+    LaunchedEffect(toDoItemId,categoriaId) {
         val resultado = viewModel.obtenerPorId(toDoItemId)
-        todo = resultado
+        val catResult = viewModel.buscarCategoriaPorId(categoriaId)
+
         resultado?.let {
+            todo = it
             title = it.title
             description = it.description ?: ""
             categoriaId = it.categoriaId
         }
+        cat = catResult as? Categoria
     }
 
     Scaffold(
@@ -80,6 +87,7 @@ fun ToDoDetailScreen(
                     Icon(
                         painter = painterResource(R.drawable.edit),
                         contentDescription = "Editar tarea",
+
 
                     )}
                     todo?.let {
@@ -139,10 +147,15 @@ fun ToDoDetailScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = todo!!.title.first().uppercase(),
+                                text = todo?.title?.first()?.uppercase() ?: "",
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Bold
                             )
+                         /*   Icon(
+                                painter = painterResource(cat?.iconRes?:R.drawable.ic_other),
+                                contentDescription = cat?.nombre,
+                                modifier = Modifier.size(40.dp),
+                            )*/
                         }
                     }
 
@@ -167,8 +180,8 @@ fun ToDoDetailScreen(
 
                     Text(
                         text = "Fecha: ${todo?.date}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = "🕒 ${todo?.time}",

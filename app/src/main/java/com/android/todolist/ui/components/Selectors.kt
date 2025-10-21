@@ -1,6 +1,7 @@
 package com.android.todolist.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,18 +12,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ripple.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 
 @Composable
 fun Selectors(
@@ -37,11 +41,14 @@ fun Selectors(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(categorias) { categoria ->
-            val isSelected = categoria.id.equals(selectedCategoriaId)
+            val isSelected = categoria.id == selectedCategoriaId
             Card(
                 modifier = Modifier
                     .size(width = 80.dp, height = 80.dp) // Tamaño uniforme
-                    .clickable { onCategoriaSelected(categoria.id) },
+                    .clickable (
+                        interactionSource = remember { MutableInteractionSource() },
+                     )
+                    { onCategoriaSelected(categoria.id) },
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent

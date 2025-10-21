@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.android.todolist.data.dao.CategoriaDao
 import com.android.todolist.data.dao.ToDoDao
 
 
 @Database(entities = [ToDoEntity::class, Categoria::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun toDoDao(): ToDoDao
+    abstract fun categoryDao() : CategoriaDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
